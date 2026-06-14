@@ -1,51 +1,39 @@
 {
   "total_buildings": 90,
-  "total_archetypes": 9,
+  "train_buildings": 72,
+  "test_buildings": 18,
+  "total_archetypes": 4,
+  "silhouette_score_train": 0.2554,
+  "silhouette_score_test": 0.0219,
+  "inertia": 419.82,
   "archetypes": [
     {
-      "name": "Single-Family, Small, 1-Story, Pre-1940",
-      "count": 4,
-      "percentage": 4.4
+      "name": "Small Old Single-Family Homes",
+      "train_count": 17,
+      "test_count": 0,
+      "total_count": 17,
+      "percentage": 18.9
     },
     {
-      "name": "Single-Family, Medium, 1-Story, Pre-1940",
-      "count": 13,
-      "percentage": 14.4
+      "name": "Medium-Sized Post-1980 Single-Family Homes",
+      "train_count": 28,
+      "test_count": 6,
+      "total_count": 34,
+      "percentage": 37.8
     },
     {
-      "name": "Single-Family, Medium, 1-Story, Built 1940\u20131980",
-      "count": 11,
-      "percentage": 12.2
+      "name": "Mobile or Manufactured Homes",
+      "train_count": 7,
+      "test_count": 11,
+      "total_count": 18,
+      "percentage": 20.0
     },
     {
-      "name": "Single-Family, Large, Tri-Level or 2-Story, Modern (Post-1980)",
-      "count": 11,
-      "percentage": 12.2
-    },
-    {
-      "name": "Mobile/Manufactured Home",
-      "count": 10,
-      "percentage": 11.1
-    },
-    {
-      "name": "Single-Family with Attached Garage",
-      "count": 12,
-      "percentage": 13.3
-    },
-    {
-      "name": "Single-Family with Detached Garage",
-      "count": 15,
-      "percentage": 16.7
-    },
-    {
-      "name": "Single-Family with Additional Features (e.g., deck or patio)",
-      "count": 5,
-      "percentage": 5.6
-    },
-    {
-      "name": "Single-Family without Garage or Features",
-      "count": 9,
-      "percentage": 10.0
+      "name": "Large Older or Mixed-Use Buildings",
+      "train_count": 20,
+      "test_count": 1,
+      "total_count": 21,
+      "percentage": 23.3
     }
   ]
 }

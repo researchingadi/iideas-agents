@@ -31,18 +31,6 @@ def load_data(filepath):
     return df
 
 # ============================================
-# STEP 1B: TRAIN / TEST SPLIT
-# ============================================
-def split_data(df):
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
-    df_train = df_train.reset_index(drop=True)
-    df_test  = df_test.reset_index(drop=True)
-    print(f"\n=== TRAIN/TEST SPLIT ===")
-    print(f"Training set: {len(df_train)} buildings (80%)")
-    print(f"Test set:     {len(df_test)} buildings (20%)")
-    return df_train, df_test
-
-# ============================================
 # STEP 2: AGENT PROPOSES RATIONALE
 # ============================================
 def propose_rationale(df, modifier=""):
@@ -110,51 +98,29 @@ def user_review_rationale(rationale):
 # ============================================
 # STEP 4: FEATURE PREPARATION (helper)
 # ============================================
-def _prepare_features(df, columns_to_use, cat_mappings=None):
-    """
-    Convert selected columns to float for clustering.
-
-    Training phase  (cat_mappings=None):  builds label-encoding mappings from
-                                          the training data and returns them.
-    Test phase      (cat_mappings given):  applies the same mappings so test
-                                          encoding is consistent with training.
-    Returns (prepared DataFrame, cat_mappings dict)
-    """
+def _prepare_features(df, columns_to_use):
+    """Convert selected columns to a float DataFrame suitable for StandardScaler."""
     data = df[columns_to_use].copy()
-    is_train = cat_mappings is None
-    if is_train:
-        cat_mappings = {}
 
     for col in data.columns:
         numeric = pd.to_numeric(data[col], errors='coerce')
-        has_strings = numeric.isna().sum() > data[col].isna().sum()
-
-        if has_strings:
-            if is_train:
-                cats = pd.Categorical(data[col].fillna('Unknown').astype(str))
-                cat_mappings[col] = {v: i for i, v in enumerate(cats.categories)}
-                data[col] = cats.codes.astype(float)
-            else:
-                mapping = cat_mappings.get(col, {})
-                data[col] = (
-                    data[col].fillna('Unknown').astype(str)
-                    .map(mapping).fillna(-1).astype(float)
-                )
+        if numeric.isna().sum() > data[col].isna().sum():
+            cats = pd.Categorical(data[col].fillna('Unknown').astype(str))
+            data[col] = cats.codes.astype(float)
         else:
             data[col] = numeric
 
-    data = data.fillna(0).astype(float)
-    return data, cat_mappings
+    return data.fillna(0).astype(float)
 
 # ============================================
 # STEP 5: RUN ARCHETYPE IDENTIFICATION
 # ============================================
-def identify_archetypes(df_train, df_test, rationale, n_clusters=None):
+def identify_archetypes(df, rationale, n_clusters=None):
     prompt = f"""
     Based on this rationale:
     {rationale}
 
-    From these available columns: {list(df_train.columns)}
+    From these available columns: {list(df.columns)}
 
     Return ONLY a JSON object with:
     1. "columns_to_use": list of column names to use for clustering (only columns that exist in the dataset)
@@ -185,7 +151,7 @@ def identify_archetypes(df_train, df_test, rationale, n_clusters=None):
 
     config = json.loads(raw)
 
-    available_columns = list(df_train.columns)
+    available_columns = list(df.columns)
     columns_to_use = [col for col in config["columns_to_use"] if col in available_columns]
 
     if not columns_to_use:
@@ -202,42 +168,43 @@ def identify_archetypes(df_train, df_test, rationale, n_clusters=None):
     print(f"\n=== RUNNING ARCHETYPE IDENTIFICATION ===")
     print(f"Using columns: {columns_to_use}")
     print(f"Number of archetypes: {n_clusters}")
-    print(f"Fitting on {len(df_train)} training buildings...")
+    print(f"Clustering all {len(df)} buildings...")
 
-    # --- Training phase: fit scaler + KMeans on training set only ---
-    train_data, cat_mappings = _prepare_features(df_train, columns_to_use)
+    # --- Cluster the full dataset ---
+    all_data   = _prepare_features(df, columns_to_use)
+    scaler     = StandardScaler()
+    all_scaled = scaler.fit_transform(all_data)
 
-    scaler = StandardScaler()
-    train_scaled = scaler.fit_transform(train_data)
+    kmeans     = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    all_labels = kmeans.fit_predict(all_scaled)
 
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-    train_labels = kmeans.fit_predict(train_scaled)
-
-    sil_train = silhouette_score(train_scaled, train_labels)
-    inertia    = kmeans.inertia_
-
-    df_train = df_train.copy()
-    df_train['Archetype'] = train_labels
     archetype_map = {i: archetype_names[i] for i in range(n_clusters)}
-    df_train['Archetype_Name'] = df_train['Archetype'].map(archetype_map)
+    df_labeled = df.copy()
+    df_labeled['Archetype']      = all_labels
+    df_labeled['Archetype_Name'] = df_labeled['Archetype'].map(archetype_map)
 
-    # --- Test phase: use fitted scaler + KMeans to predict (no refit) ---
-    print(f"Predicting archetypes for {len(df_test)} test buildings...")
-    test_data, _ = _prepare_features(df_test, columns_to_use, cat_mappings)
+    # --- Stratified split: each archetype proportionally in both sets ---
+    print(f"Stratified 80/20 split by archetype label...")
+    df_train, df_test = train_test_split(
+        df_labeled,
+        test_size=0.2,
+        random_state=42,
+        stratify=df_labeled['Archetype']
+    )
 
-    test_scaled  = scaler.transform(test_data)
-    test_labels  = kmeans.predict(test_scaled)
+    # Slice the already-scaled matrix using the pre-reset original indices
+    train_scaled = all_scaled[df_train.index]
+    test_scaled  = all_scaled[df_test.index]
+    sil_train    = silhouette_score(train_scaled, all_labels[df_train.index])
+    sil_test     = silhouette_score(test_scaled,  all_labels[df_test.index])
 
-    sil_test = silhouette_score(test_scaled, test_labels)
-
-    df_test = df_test.copy()
-    df_test['Archetype'] = test_labels
-    df_test['Archetype_Name'] = df_test['Archetype'].map(archetype_map)
+    df_train = df_train.reset_index(drop=True)
+    df_test  = df_test.reset_index(drop=True)
 
     metrics = {
         "silhouette_score_train": round(float(sil_train), 4),
         "silhouette_score_test":  round(float(sil_test), 4),
-        "inertia":                round(float(inertia), 2),
+        "inertia":                round(float(kmeans.inertia_), 2),
     }
 
     return df_train, df_test, archetype_names, n_clusters, metrics
@@ -268,7 +235,7 @@ def present_results(df_train, df_test, archetype_names, rationale, metrics):
     print()
     if missing_in_test:
         print(f"  WARNING: These archetypes have NO test buildings: {missing_in_test}")
-        print("           Consider fewer archetypes or a different split.\n")
+        print("           Archetype has too few buildings for stratified split — consider fewer archetypes.\n")
 
     results_summary = df_full.groupby('Archetype_Name').size().to_string()
 
@@ -385,7 +352,6 @@ def main():
 
     filepath = input("\nEnter path to your CSV file: ").strip()
     df = load_data(filepath)
-    df_train, df_test = split_data(df)
 
     rationale  = None
     n_clusters = None
@@ -419,9 +385,9 @@ def main():
             rationale = propose_rationale(df, f"User modification request: {modification}")
             continue
 
-        # Run identification (train only, then predict test)
+        # Cluster full dataset, then stratified split
         df_train_r, df_test_r, archetype_names, n_clusters, metrics = identify_archetypes(
-            df_train.copy(), df_test.copy(), rationale, n_clusters
+            df.copy(), rationale, n_clusters
         )
 
         # Present results + validation summary

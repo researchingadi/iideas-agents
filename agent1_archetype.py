@@ -4,6 +4,8 @@ import json
 import re
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import silhouette_score
 import numpy as np
 import os
 from dotenv import load_dotenv
@@ -29,6 +31,18 @@ def load_data(filepath):
     return df
 
 # ============================================
+# STEP 1B: TRAIN / TEST SPLIT
+# ============================================
+def split_data(df):
+    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
+    df_train = df_train.reset_index(drop=True)
+    df_test  = df_test.reset_index(drop=True)
+    print(f"\n=== TRAIN/TEST SPLIT ===")
+    print(f"Training set: {len(df_train)} buildings (80%)")
+    print(f"Test set:     {len(df_test)} buildings (20%)")
+    return df_train, df_test
+
+# ============================================
 # STEP 2: AGENT PROPOSES RATIONALE
 # ============================================
 def propose_rationale(df, modifier=""):
@@ -36,25 +50,25 @@ def propose_rationale(df, modifier=""):
     columns = list(df.columns)
 
     prompt = f"""
-    You are an expert building scientist working on archetype identification 
+    You are an expert building scientist working on archetype identification
     for disaster debris management and life cycle assessment.
-    
+
     I have a dataset with {len(df)} buildings with these columns:
     {columns}
-    
+
     Here is a sample of the data:
     {sample_data}
-    
+
     {modifier}
-    
-    Based on this data, propose a clear rationale for classifying these 
+
+    Based on this data, propose a clear rationale for classifying these
     buildings into archetypes. Include:
     1. Which columns to use for classification and why
     2. Specific criteria/thresholds for each factor
     3. How many archetypes you recommend and why
     4. The expected archetype categories
-    
-    Be specific, clear and explainable. Format your response clearly with 
+
+    Be specific, clear and explainable. Format your response clearly with
     numbered sections.
     """
 
@@ -94,20 +108,59 @@ def user_review_rationale(rationale):
     return choice
 
 # ============================================
-# STEP 4: RUN ARCHETYPE IDENTIFICATION
+# STEP 4: FEATURE PREPARATION (helper)
 # ============================================
-def identify_archetypes(df, rationale, n_clusters=None):
+def _prepare_features(df, columns_to_use, cat_mappings=None):
+    """
+    Convert selected columns to float for clustering.
+
+    Training phase  (cat_mappings=None):  builds label-encoding mappings from
+                                          the training data and returns them.
+    Test phase      (cat_mappings given):  applies the same mappings so test
+                                          encoding is consistent with training.
+    Returns (prepared DataFrame, cat_mappings dict)
+    """
+    data = df[columns_to_use].copy()
+    is_train = cat_mappings is None
+    if is_train:
+        cat_mappings = {}
+
+    for col in data.columns:
+        numeric = pd.to_numeric(data[col], errors='coerce')
+        has_strings = numeric.isna().sum() > data[col].isna().sum()
+
+        if has_strings:
+            if is_train:
+                cats = pd.Categorical(data[col].fillna('Unknown').astype(str))
+                cat_mappings[col] = {v: i for i, v in enumerate(cats.categories)}
+                data[col] = cats.codes.astype(float)
+            else:
+                mapping = cat_mappings.get(col, {})
+                data[col] = (
+                    data[col].fillna('Unknown').astype(str)
+                    .map(mapping).fillna(-1).astype(float)
+                )
+        else:
+            data[col] = numeric
+
+    data = data.fillna(0).astype(float)
+    return data, cat_mappings
+
+# ============================================
+# STEP 5: RUN ARCHETYPE IDENTIFICATION
+# ============================================
+def identify_archetypes(df_train, df_test, rationale, n_clusters=None):
     prompt = f"""
     Based on this rationale:
     {rationale}
-    
-    From these available columns: {list(df.columns)}
-    
+
+    From these available columns: {list(df_train.columns)}
+
     Return ONLY a JSON object with:
     1. "columns_to_use": list of column names to use for clustering (only columns that exist in the dataset)
     2. "n_clusters": recommended number of archetypes (integer between 4 and 12)
     3. "archetype_names": list of descriptive names for each archetype (same length as n_clusters)
-    
+
     Return ONLY valid JSON with no markdown, no code blocks, no explanation. Just the raw JSON object.
     """
 
@@ -126,27 +179,22 @@ def identify_archetypes(df, rationale, n_clusters=None):
     )
 
     raw = response.choices[0].message.content.strip()
-
-    # Strip markdown code fences (e.g. ```json ... ``` or ``` ... ```)
     raw = re.sub(r'^```(?:json)?\s*', '', raw, flags=re.MULTILINE)
     raw = re.sub(r'```\s*$', '', raw, flags=re.MULTILINE)
     raw = raw.strip()
 
     config = json.loads(raw)
 
-    # Only use columns that actually exist in the dataframe
-    available_columns = list(df.columns)
+    available_columns = list(df_train.columns)
     columns_to_use = [col for col in config["columns_to_use"] if col in available_columns]
 
     if not columns_to_use:
-        # Fallback columns if none match
         columns_to_use = ['yearOfConstruction', 'grossFloorArea', 'numOfFloors', 'constructionType']
         columns_to_use = [col for col in columns_to_use if col in available_columns]
 
     if n_clusters is None:
         n_clusters = config["n_clusters"]
 
-    # Make sure archetype names match cluster count
     archetype_names = config.get("archetype_names", [])
     if len(archetype_names) != n_clusters:
         archetype_names = [f"Archetype {i+1}" for i in range(n_clusters)]
@@ -154,59 +202,83 @@ def identify_archetypes(df, rationale, n_clusters=None):
     print(f"\n=== RUNNING ARCHETYPE IDENTIFICATION ===")
     print(f"Using columns: {columns_to_use}")
     print(f"Number of archetypes: {n_clusters}")
+    print(f"Fitting on {len(df_train)} training buildings...")
 
-    # Prepare data
-    cluster_data = df[columns_to_use].copy()
+    # --- Training phase: fit scaler + KMeans on training set only ---
+    train_data, cat_mappings = _prepare_features(df_train, columns_to_use)
 
-    # Convert every column to numeric; fall back to categorical codes
-    # when pd.to_numeric introduces new NaN values (i.e. the column has strings)
-    for col in cluster_data.columns:
-        numeric = pd.to_numeric(cluster_data[col], errors='coerce')
-        if numeric.isna().sum() > cluster_data[col].isna().sum():
-            cluster_data[col] = pd.Categorical(
-                cluster_data[col].fillna('Unknown').astype(str)
-            ).codes.astype(float)
-        else:
-            cluster_data[col] = numeric
-
-    # Fill any remaining NaN with 0 and guarantee float dtype
-    cluster_data = cluster_data.fillna(0).astype(float)
-
-    # Normalize
     scaler = StandardScaler()
-    cluster_data_scaled = scaler.fit_transform(cluster_data)
+    train_scaled = scaler.fit_transform(train_data)
 
-    # Run KMeans
     kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-    df['Archetype'] = kmeans.fit_predict(cluster_data_scaled)
+    train_labels = kmeans.fit_predict(train_scaled)
 
-    # Map to names
+    sil_train = silhouette_score(train_scaled, train_labels)
+    inertia    = kmeans.inertia_
+
+    df_train = df_train.copy()
+    df_train['Archetype'] = train_labels
     archetype_map = {i: archetype_names[i] for i in range(n_clusters)}
-    df['Archetype_Name'] = df['Archetype'].map(archetype_map)
+    df_train['Archetype_Name'] = df_train['Archetype'].map(archetype_map)
 
-    return df, archetype_names, n_clusters
+    # --- Test phase: use fitted scaler + KMeans to predict (no refit) ---
+    print(f"Predicting archetypes for {len(df_test)} test buildings...")
+    test_data, _ = _prepare_features(df_test, columns_to_use, cat_mappings)
+
+    test_scaled  = scaler.transform(test_data)
+    test_labels  = kmeans.predict(test_scaled)
+
+    sil_test = silhouette_score(test_scaled, test_labels)
+
+    df_test = df_test.copy()
+    df_test['Archetype'] = test_labels
+    df_test['Archetype_Name'] = df_test['Archetype'].map(archetype_map)
+
+    metrics = {
+        "silhouette_score_train": round(float(sil_train), 4),
+        "silhouette_score_test":  round(float(sil_test), 4),
+        "inertia":                round(float(inertia), 2),
+    }
+
+    return df_train, df_test, archetype_names, n_clusters, metrics
 
 # ============================================
-# STEP 5: PRESENT RESULTS
+# STEP 6: PRESENT RESULTS
 # ============================================
-def present_results(df, archetype_names, rationale):
+def present_results(df_train, df_test, archetype_names, rationale, metrics):
+    df_full  = pd.concat([df_train, df_test], ignore_index=True)
+    n_train  = len(df_train)
+    n_test   = len(df_test)
+    n_total  = len(df_full)
+
     print("\n=== ARCHETYPE IDENTIFICATION RESULTS ===\n")
+    print(f"{'Archetype':<40} {'Train':>8} {'Test':>8} {'Total':>8} {'%':>6}")
+    print("-" * 75)
 
+    missing_in_test = []
     for name in archetype_names:
-        archetype_df = df[df['Archetype_Name'] == name]
-        print(f"Archetype: {name}")
-        print(f"  Buildings: {len(archetype_df)} ({len(archetype_df)/len(df)*100:.1f}%)")
-        print()
+        tr  = len(df_train[df_train['Archetype_Name'] == name])
+        te  = len(df_test[df_test['Archetype_Name'] == name])
+        tot = tr + te
+        pct = tot / n_total * 100
+        print(f"{name:<40} {tr:>8} {te:>8} {tot:>8} {pct:>5.1f}%")
+        if te == 0:
+            missing_in_test.append(name)
 
-    results_summary = df.groupby('Archetype_Name').size().to_string()
+    print()
+    if missing_in_test:
+        print(f"  WARNING: These archetypes have NO test buildings: {missing_in_test}")
+        print("           Consider fewer archetypes or a different split.\n")
+
+    results_summary = df_full.groupby('Archetype_Name').size().to_string()
 
     prompt = f"""
-    We identified the following building archetypes from a community dataset of {len(df)} buildings:
+    We identified the following building archetypes from a community dataset of {n_total} buildings:
     {results_summary}
-    
+
     Based on this rationale:
     {rationale}
-    
+
     Provide a brief, clear explanation of:
     1. What each archetype represents
     2. Why this grouping makes sense for LCA and debris management
@@ -230,6 +302,25 @@ def present_results(df, archetype_names, rationale):
     print("=== AGENT EXPLANATION ===")
     print(response.choices[0].message.content)
 
+    # --- Validation summary ---
+    sil_train = metrics["silhouette_score_train"]
+    sil_test  = metrics["silhouette_score_test"]
+    diff = abs(sil_train - sil_test)
+    if diff < 0.05:
+        generalization = "GOOD"
+    elif diff < 0.15:
+        generalization = "FAIR"
+    else:
+        generalization = "POOR"
+
+    print("\n=== VALIDATION SUMMARY ===")
+    print(f"Training buildings:        {n_train} (80%)")
+    print(f"Test buildings:            {n_test} (20%)")
+    print(f"Silhouette Score (Train):  {sil_train:.4f}  (higher is better, max 1.0)")
+    print(f"Silhouette Score (Test):   {sil_test:.4f}")
+    print(f"Inertia:                   {metrics['inertia']:.2f}")
+    print(f"Model Generalization:      {generalization}")
+
     print("\n" + "="*50)
     print("\nOptions:")
     print("1. Approve archetypes and save results")
@@ -241,33 +332,48 @@ def present_results(df, archetype_names, rationale):
     return choice
 
 # ============================================
-# STEP 6: SAVE RESULTS
+# STEP 7: SAVE RESULTS
 # ============================================
-def save_results(df, archetype_names):
-    df.to_csv('archetype_results.csv', index=False)
+def save_results(df_train, df_test, archetype_names, metrics):
+    df_full = pd.concat([df_train, df_test], ignore_index=True)
+
+    df_train.to_csv('archetype_results_train.csv', index=False)
+    df_test.to_csv('archetype_results_test.csv',  index=False)
+    df_full.to_csv('archetype_results_full.csv',  index=False)
 
     summary = {
-        "total_buildings": len(df),
-        "total_archetypes": len(archetype_names),
+        "total_buildings":        len(df_full),
+        "train_buildings":        len(df_train),
+        "test_buildings":         len(df_test),
+        "total_archetypes":       len(archetype_names),
+        "silhouette_score_train": metrics["silhouette_score_train"],
+        "silhouette_score_test":  metrics["silhouette_score_test"],
+        "inertia":                metrics["inertia"],
         "archetypes": []
     }
 
     for name in archetype_names:
-        archetype_df = df[df['Archetype_Name'] == name]
+        tr  = len(df_train[df_train['Archetype_Name'] == name])
+        te  = len(df_test[df_test['Archetype_Name'] == name])
+        tot = tr + te
         summary["archetypes"].append({
-            "name": name,
-            "count": len(archetype_df),
-            "percentage": round(len(archetype_df)/len(df)*100, 1)
+            "name":        name,
+            "train_count": tr,
+            "test_count":  te,
+            "total_count": tot,
+            "percentage":  round(tot / len(df_full) * 100, 1)
         })
 
     with open('archetype_results.json', 'w') as f:
         json.dump(summary, f, indent=2)
 
     print("\n=== RESULTS SAVED ===")
-    print("archetype_results.csv - Full dataset with archetype labels")
-    print("archetype_results.json - Summary ready for Agent 2")
+    print("archetype_results_train.csv  - Training buildings with archetype labels")
+    print("archetype_results_test.csv   - Test buildings with archetype labels")
+    print("archetype_results_full.csv   - All buildings combined")
+    print("archetype_results.json       - Summary with train/test metrics for Agent 2")
     print(f"\nTotal archetypes identified: {len(archetype_names)}")
-    print(f"Total buildings classified: {len(df)}")
+    print(f"Total buildings classified:  {len(df_full)}")
 
 # ============================================
 # MAIN PIPELINE
@@ -279,8 +385,9 @@ def main():
 
     filepath = input("\nEnter path to your CSV file: ").strip()
     df = load_data(filepath)
+    df_train, df_test = split_data(df)
 
-    rationale = None
+    rationale  = None
     n_clusters = None
 
     while True:
@@ -312,16 +419,16 @@ def main():
             rationale = propose_rationale(df, f"User modification request: {modification}")
             continue
 
-        # Run identification
-        df_result, archetype_names, n_clusters = identify_archetypes(
-            df.copy(), rationale, n_clusters
+        # Run identification (train only, then predict test)
+        df_train_r, df_test_r, archetype_names, n_clusters, metrics = identify_archetypes(
+            df_train.copy(), df_test.copy(), rationale, n_clusters
         )
 
-        # Present results
-        result_choice = present_results(df_result, archetype_names, rationale)
+        # Present results + validation summary
+        result_choice = present_results(df_train_r, df_test_r, archetype_names, rationale, metrics)
 
         if result_choice == "1":
-            save_results(df_result, archetype_names)
+            save_results(df_train_r, df_test_r, archetype_names, metrics)
             print("\nAgent 1 complete! Ready for Agent 2.")
             break
 
@@ -334,7 +441,7 @@ def main():
             print(f"\nRerunning with {n_clusters} archetypes...")
 
         elif result_choice == "4":
-            rationale = None
+            rationale  = None
             n_clusters = None
             print("\nRestarting with modified rationale...")
 

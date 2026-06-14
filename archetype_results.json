@@ -2,38 +2,66 @@
   "total_buildings": 90,
   "train_buildings": 72,
   "test_buildings": 18,
-  "total_archetypes": 4,
-  "silhouette_score_train": 0.2554,
-  "silhouette_score_test": 0.0219,
-  "inertia": 419.82,
+  "total_archetypes": 8,
+  "silhouette_score_train": 0.3009,
+  "silhouette_score_test": 0.2464,
+  "inertia": 696.45,
   "archetypes": [
     {
-      "name": "Small Old Single-Family Homes",
-      "train_count": 17,
-      "test_count": 0,
-      "total_count": 17,
-      "percentage": 18.9
-    },
-    {
-      "name": "Medium-Sized Post-1980 Single-Family Homes",
-      "train_count": 28,
-      "test_count": 6,
-      "total_count": 34,
-      "percentage": 37.8
-    },
-    {
-      "name": "Mobile or Manufactured Homes",
-      "train_count": 7,
-      "test_count": 11,
-      "total_count": 18,
-      "percentage": 20.0
-    },
-    {
-      "name": "Large Older or Mixed-Use Buildings",
-      "train_count": 20,
+      "name": "Old, Small, Wood-Frame Single-Family Homes",
+      "train_count": 2,
       "test_count": 1,
-      "total_count": 21,
-      "percentage": 23.3
+      "total_count": 3,
+      "percentage": 3.3
+    },
+    {
+      "name": "Mid-Age, Medium, Wood-Frame/Masonry Single-Family Homes",
+      "train_count": 16,
+      "test_count": 4,
+      "total_count": 20,
+      "percentage": 22.2
+    },
+    {
+      "name": "Modern, Large, Wood-Frame Single-Family Homes",
+      "train_count": 15,
+      "test_count": 4,
+      "total_count": 19,
+      "percentage": 21.1
+    },
+    {
+      "name": "Post-Modern, Large Single-Family or Multi-Family Buildings",
+      "train_count": 10,
+      "test_count": 2,
+      "total_count": 12,
+      "percentage": 13.3
+    },
+    {
+      "name": "Manufactured/Mobile Homes",
+      "train_count": 9,
+      "test_count": 2,
+      "total_count": 11,
+      "percentage": 12.2
+    },
+    {
+      "name": "Residential Buildings with Comprehensive Auxiliary Structures",
+      "train_count": 9,
+      "test_count": 2,
+      "total_count": 11,
+      "percentage": 12.2
+    },
+    {
+      "name": "Non-Residential Buildings",
+      "train_count": 5,
+      "test_count": 1,
+      "total_count": 6,
+      "percentage": 6.7
+    },
+    {
+      "name": "Not Enough/Conflicting Data Archetype",
+      "train_count": 6,
+      "test_count": 2,
+      "total_count": 8,
+      "percentage": 8.9
     }
   ]
 }

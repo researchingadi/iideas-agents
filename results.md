@@ -2,7 +2,6 @@
 
 **Institution:** Mississippi State University  
 **Lab:** IIDEAS Lab (Intelligent Infrastructure for Disaster-Resilient Engineering and Sustainable Systems)  
-**PI:** Dr. Mojtaba Parsaee  
 **Developer:** Adi Singh (@researchingadi)  
 **Dataset:** Sullivan, Indiana Community Buildings (90 buildings, 67 attributes)  
 **Date:** June 2026

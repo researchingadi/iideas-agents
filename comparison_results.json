@@ -1,0 +1,720 @@
+[
+  {
+    "increment_pct": 10,
+    "n_buildings": 9,
+    "old_script": {
+      "n_archetypes": 6,
+      "distribution": {
+        "1980-1999 | Medium | Wood Frame": 2,
+        "1900-1940 | Medium | Wood Frame": 2,
+        "1961-1979 | Large | Masonry": 1,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1900-1940 | Small | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 3,
+      "distribution": {
+        "Archetype 1": 7,
+        "Archetype 2": 1,
+        "Archetype 3": 1
+      },
+      "silhouette_score": 0.2609,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 7,
+      "distribution": {
+        "1980-1999 | Medium | Wood Frame": 2,
+        "1900-1940 | Medium | Wood Frame": 2,
+        "1961-1979 | Large | Masonry": 1,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "Unknown": 1,
+        "1900-1940 | Small | Wood Frame": 1
+      },
+      "silhouette_score": "N/A",
+      "accuracy": "N/A (9 buildings / 7 classes \u2014 too few)",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.0806,
+      "old_vs_ml_ari": 1.0,
+      "agent_vs_ml_ari": 0.0806
+    }
+  },
+  {
+    "increment_pct": 20,
+    "n_buildings": 18,
+    "old_script": {
+      "n_archetypes": 7,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 4,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Large | Masonry": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1941-1960 | Medium | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 5,
+      "distribution": {
+        "Single-Family Detached": 6,
+        "Multi-Family Units": 9,
+        "Mobile Homes": 1,
+        "Commercial Spaces": 1,
+        "Vacant/Other": 1
+      },
+      "silhouette_score": 0.1408,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 8,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 4,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1941-1960 | Medium | Wood Frame": 2,
+        "Unknown": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1961-1979 | Large | Masonry": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.75",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.0118,
+      "old_vs_ml_ari": 0.9338,
+      "agent_vs_ml_ari": 0.0118
+    }
+  },
+  {
+    "increment_pct": 30,
+    "n_buildings": 27,
+    "old_script": {
+      "n_archetypes": 12,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 4,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1961-1979 | Large | Masonry": 2,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1941-1960 | Medium | Wood Frame": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 6,
+      "distribution": {
+        "Single-Family Detached": 1,
+        "Mobile Home": 11,
+        "Multi-Unit Residential": 3,
+        "Bungalow-Style": 3,
+        "Modern Large Home": 8,
+        "Vacant/Undefined": 1
+      },
+      "silhouette_score": 0.1555,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 13,
+      "distribution": {
+        "1961-1979 | Medium | Wood Frame": 5,
+        "1900-1940 | Small | Wood Frame": 5,
+        "1900-1940 | Medium | Wood Frame": 4,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "Unknown": 2,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.3333",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.1487,
+      "old_vs_ml_ari": 0.6799,
+      "agent_vs_ml_ari": 0.2269
+    }
+  },
+  {
+    "increment_pct": 40,
+    "n_buildings": 36,
+    "old_script": {
+      "n_archetypes": 17,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 5,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1941-1960 | Medium | Wood Frame": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1941-1960 | Large | Masonry": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 5,
+      "distribution": {
+        "Single-Family Basic": 3,
+        "Mobile/Manufactured Home": 12,
+        "Bungalow Type": 12,
+        "Large Multi-Level": 8,
+        "Unclassified or Incomplete Data": 1
+      },
+      "silhouette_score": 0.1332,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 18,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 6,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "Unknown": 4,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1961-1979 | Medium | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 2,
+        "2000+ | Large | Other": 2,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1941-1960 | Medium | Wood Frame": 1,
+        "2000+ | Medium | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "2000+ | Small | Other": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.375",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.0834,
+      "old_vs_ml_ari": 0.7762,
+      "agent_vs_ml_ari": 0.0857
+    }
+  },
+  {
+    "increment_pct": 50,
+    "n_buildings": 45,
+    "old_script": {
+      "n_archetypes": 19,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 8,
+        "1900-1940 | Small | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1900-1940 | Large | Wood Frame": 2,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1941-1960 | Medium | Wood Frame": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1941-1960 | Large | Masonry": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 5,
+      "distribution": {
+        "Single-Family Housing": 19,
+        "Multi-Family Housing": 1,
+        "Mobile/Manufactured Homes": 9,
+        "Commercial Properties": 11,
+        "Other/Undefined Properties": 5
+      },
+      "silhouette_score": 0.1418,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 20,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 9,
+        "Unknown": 7,
+        "1980-1999 | Medium | Wood Frame": 5,
+        "1961-1979 | Medium | Wood Frame": 4,
+        "1900-1940 | Small | Wood Frame": 3,
+        "1980-1999 | Small | Other": 3,
+        "1961-1979 | Large | Masonry": 2,
+        "1900-1940 | Large | Wood Frame": 2,
+        "1961-1979 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1941-1960 | Medium | Wood Frame": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1941-1960 | Large | Masonry": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "2000+ | Small | Wood Frame": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.4444",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.1231,
+      "old_vs_ml_ari": 0.8187,
+      "agent_vs_ml_ari": 0.1519
+    }
+  },
+  {
+    "increment_pct": 60,
+    "n_buildings": 54,
+    "old_script": {
+      "n_archetypes": 21,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 10,
+        "1900-1940 | Small | Wood Frame": 6,
+        "1941-1960 | Medium | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1900-1940 | Large | Wood Frame": 2,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1941-1960 | Large | Masonry": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 8,
+      "distribution": {
+        "Modern Single-Family Homes": 10,
+        "Historic Single-Family Homes": 7,
+        "Multi-Family Apartament Buildings": 10,
+        "Manufactured Homes": 12,
+        "Luxury Residences": 6,
+        "Compact Urban Dwellings": 6,
+        "Mixed-use Buildings": 2,
+        "Specialized and Unique Structures": 1
+      },
+      "silhouette_score": 0.2806,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 22,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 13,
+        "1900-1940 | Small | Wood Frame": 7,
+        "Unknown": 6,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1961-1979 | Small | Other": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1961-1979 | Large | Masonry": 2,
+        "1941-1960 | Medium | Wood Frame": 2,
+        "1941-1960 | Large | Masonry": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1900-1940 | Large | Wood Frame": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.4545",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.1553,
+      "old_vs_ml_ari": 0.7409,
+      "agent_vs_ml_ari": 0.2318
+    }
+  },
+  {
+    "increment_pct": 70,
+    "n_buildings": 62,
+    "old_script": {
+      "n_archetypes": 23,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 12,
+        "1900-1940 | Small | Wood Frame": 6,
+        "1941-1960 | Medium | Wood Frame": 5,
+        "1961-1979 | Medium | Wood Frame": 5,
+        "1961-1979 | Large | Masonry": 3,
+        "1980-1999 | Medium | Wood Frame": 3,
+        "1900-1940 | Large | Wood Frame": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1941-1960 | Large | Masonry": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 6,
+      "distribution": {
+        "Single-Family Detached Small": 5,
+        "Single-Family Detached Large": 21,
+        "Mobile/Manufactured Home": 22,
+        "Multi-Family Low-Rise": 7,
+        "Multi-Family High-Rise": 4,
+        "Specialized Structures": 3
+      },
+      "silhouette_score": 0.1567,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 24,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 12,
+        "Unknown": 7,
+        "1900-1940 | Small | Wood Frame": 7,
+        "1980-1999 | Medium | Wood Frame": 5,
+        "1941-1960 | Medium | Wood Frame": 5,
+        "1900-1940 | Large | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1961-1979 | Medium | Wood Frame": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.6154",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.1141,
+      "old_vs_ml_ari": 0.8784,
+      "agent_vs_ml_ari": 0.1158
+    }
+  },
+  {
+    "increment_pct": 80,
+    "n_buildings": 72,
+    "old_script": {
+      "n_archetypes": 26,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 16,
+        "1900-1940 | Small | Wood Frame": 6,
+        "1961-1979 | Medium | Wood Frame": 6,
+        "1941-1960 | Medium | Wood Frame": 5,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1900-1940 | Large | Wood Frame": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1941-1960 | Large | Masonry": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "2000+ | Small | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1900-1940 | Large | Masonry": 1,
+        "1941-1960 | Large | Wood Frame": 1,
+        "1980-1999 | Small | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 6,
+      "distribution": {
+        "Single-Family Detached": 17,
+        "Multi-Family Low-Rise": 14,
+        "Manufactured Home": 5,
+        "High-Rise Residential": 15,
+        "Commercial Mixed Use": 10,
+        "Others": 11
+      },
+      "silhouette_score": 0.1644,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 27,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 17,
+        "Unknown": 7,
+        "1961-1979 | Medium | Wood Frame": 6,
+        "1900-1940 | Small | Wood Frame": 5,
+        "1941-1960 | Medium | Wood Frame": 5,
+        "1961-1979 | Large | Masonry": 4,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "1980-1999 | Small | Other": 4,
+        "1900-1940 | Large | Wood Frame": 3,
+        "1961-1979 | Small | Other": 3,
+        "1941-1960 | Large | Masonry": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1900-1940 | Large | Masonry": 1,
+        "1941-1960 | Large | Wood Frame": 1,
+        "1980-1999 | Small | Wood Frame": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.6667",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.1126,
+      "old_vs_ml_ari": 0.9184,
+      "agent_vs_ml_ari": 0.1112
+    }
+  },
+  {
+    "increment_pct": 90,
+    "n_buildings": 81,
+    "old_script": {
+      "n_archetypes": 26,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 21,
+        "1900-1940 | Small | Wood Frame": 6,
+        "1941-1960 | Medium | Wood Frame": 6,
+        "1961-1979 | Medium | Wood Frame": 6,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "1900-1940 | Large | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1941-1960 | Large | Masonry": 2,
+        "2000+ | Small | Other": 2,
+        "1941-1960 | Large | Wood Frame": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1900-1940 | Large | Masonry": 1,
+        "1980-1999 | Small | Wood Frame": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 6,
+      "distribution": {
+        "Single-Family Detached": 21,
+        "Mobile/Manufactured Home": 20,
+        "Bungalow": 7,
+        "Multi-Unit Residential": 10,
+        "Luxury Residential": 11,
+        "Other": 12
+      },
+      "silhouette_score": 0.1561,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 27,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 23,
+        "1961-1979 | Medium | Wood Frame": 8,
+        "Unknown": 7,
+        "1900-1940 | Small | Wood Frame": 5,
+        "1941-1960 | Medium | Wood Frame": 5,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "1900-1940 | Large | Wood Frame": 4,
+        "1941-1960 | Large | Wood Frame": 4,
+        "2000+ | Small | Other": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1900-1940 | Large | Masonry": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1961-1979 | Large | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "2000+ | Large | Wood Frame": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1980-1999 | Small | Wood Frame": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.5294",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.2021,
+      "old_vs_ml_ari": 0.8687,
+      "agent_vs_ml_ari": 0.2212
+    }
+  },
+  {
+    "increment_pct": 100,
+    "n_buildings": 90,
+    "old_script": {
+      "n_archetypes": 29,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 21,
+        "1900-1940 | Small | Wood Frame": 6,
+        "1941-1960 | Medium | Wood Frame": 6,
+        "1961-1979 | Medium | Wood Frame": 6,
+        "1980-1999 | Medium | Wood Frame": 4,
+        "1900-1940 | Large | Wood Frame": 4,
+        "1961-1979 | Large | Masonry": 3,
+        "1961-1979 | Small | Other": 2,
+        "1980-1999 | Small | Other": 2,
+        "1941-1960 | Large | Masonry": 2,
+        "2000+ | Small | Other": 2,
+        "2000+ | Large | Wood Frame": 2,
+        "1941-1960 | Large | Wood Frame": 2,
+        "1980-1999 | Large | Wood Frame": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "1980-1999 | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "2000+ | Small | Unknown": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "2000+ | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1900-1940 | Large | Masonry": 1,
+        "1980-1999 | Small | Wood Frame": 1,
+        "1900-1940 | Unknown | Unknown": 1,
+        "1961-1979 | Unknown | Unknown": 1
+      },
+      "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
+    },
+    "ai_agent": {
+      "n_archetypes": 8,
+      "distribution": {
+        "Single-Family Modern Low-Rise": 5,
+        "Single-Family Historical Homes": 14,
+        "Manufactured or Mobile Homes": 19,
+        "Large Multi-Family Complexes": 7,
+        "Small Multi-Family Units": 21,
+        "Farmhouses and Agricultural Buildings": 11,
+        "Urban Compact Structures": 12,
+        "Other/Unclassified": 1
+      },
+      "silhouette_score": 0.1924,
+      "method": "GPT-4o + KMeans clustering"
+    },
+    "ml_model": {
+      "n_archetypes": 30,
+      "distribution": {
+        "1900-1940 | Medium | Wood Frame": 22,
+        "Unknown": 11,
+        "1961-1979 | Medium | Wood Frame": 7,
+        "1941-1960 | Medium | Wood Frame": 7,
+        "1980-1999 | Medium | Wood Frame": 5,
+        "1900-1940 | Small | Wood Frame": 5,
+        "1900-1940 | Large | Wood Frame": 4,
+        "1961-1979 | Small | Other": 3,
+        "1980-1999 | Small | Other": 3,
+        "1941-1960 | Large | Masonry": 3,
+        "2000+ | Small | Other": 2,
+        "2000+ | Large | Wood Frame": 2,
+        "1941-1960 | Large | Wood Frame": 2,
+        "1980-1999 | Large | Wood Frame": 2,
+        "1900-1940 | Medium | Masonry": 1,
+        "1961-1979 | Large | Masonry": 1,
+        "2000+ | Medium | Other": 1,
+        "2000+ | Large | Other": 1,
+        "1980-1999 | Large | Masonry": 1,
+        "1941-1960 | Small | Wood Frame": 1,
+        "1900-1940 | Medium | Other": 1,
+        "1961-1979 | Small | Wood Frame": 1,
+        "2000+ | Medium | Wood Frame": 1,
+        "1980-1999 | Small | Wood Frame": 1,
+        "1900-1940 | Unknown | Unknown": 1,
+        "1961-1979 | Unknown | Unknown": 1
+      },
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "0.5556",
+      "method": "Random Forest (old-script labels as ground truth)"
+    },
+    "agreement": {
+      "old_vs_agent_ari": 0.2329,
+      "old_vs_ml_ari": 0.9075,
+      "agent_vs_ml_ari": 0.23
+    }
+  }
+]

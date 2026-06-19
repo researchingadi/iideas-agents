@@ -351,6 +351,25 @@ def main():
     print("="*50)
 
     filepath = input("\nEnter path to your CSV file: ").strip()
+
+    # ── Run dataset validation first ────────────────────────────────────────
+    print("\n=== STEP 0: VALIDATING DATASET ===")
+    from validate_dataset import validate_dataset
+    passed, mapped_cols, issues = validate_dataset(filepath)
+
+    if not passed:
+        print("\n❌ Dataset validation FAILED.")
+        print("Issues found:")
+        for issue in issues:
+            print(f"  - {issue}")
+        retry = input("\nDo you want to proceed anyway? (yes/no): ").strip().lower()
+        if retry != "yes":
+            print("Exiting. Please fix the dataset and try again.")
+            return
+        print("\n⚠️  Proceeding with validation warnings...")
+    else:
+        print("\n✅ Dataset validation PASSED. Proceeding to analysis...")
+
     df = load_data(filepath)
 
     rationale  = None

@@ -21,28 +21,26 @@
         "Archetype 2": 1,
         "Archetype 3": 1
       },
-      "silhouette_score": 0.2609,
+      "silhouette_score": 0.2462,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 7,
+      "n_archetypes": 3,
       "distribution": {
-        "1980-1999 | Medium | Wood Frame": 2,
-        "1900-1940 | Medium | Wood Frame": 2,
-        "1961-1979 | Large | Masonry": 1,
-        "1900-1940 | Medium | Masonry": 1,
-        "1900-1940 | Large | Wood Frame": 1,
-        "Unknown": 1,
-        "1900-1940 | Small | Wood Frame": 1
+        "0": 7,
+        "2": 1,
+        "1": 1
       },
-      "silhouette_score": "N/A",
-      "accuracy": "N/A (9 buildings / 7 classes \u2014 too few)",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "silhouette_score": "N/A (supervised)",
+      "accuracy": "N/A (9 buildings / 3 classes)",
+      "ground_truth": "AI Agent",
+      "feature_importance": {},
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
       "old_vs_agent_ari": 0.0806,
-      "old_vs_ml_ari": 1.0,
-      "agent_vs_ml_ari": 0.0806
+      "old_vs_ml_ari": 0.0806,
+      "agent_vs_ml_ari": 1.0
     }
   },
   {
@@ -62,37 +60,38 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 5,
+      "n_archetypes": 6,
       "distribution": {
-        "Single-Family Detached": 6,
-        "Multi-Family Units": 9,
-        "Mobile Homes": 1,
-        "Commercial Spaces": 1,
-        "Vacant/Other": 1
+        "Single-Family Detached": 11,
+        "Multi-Family Residential": 1,
+        "Manufactured Home": 1,
+        "Bungalow": 3,
+        "Tri-Level": 1,
+        "Commercial/Industrial": 1
       },
-      "silhouette_score": 0.1408,
+      "silhouette_score": 0.1249,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 8,
+      "n_archetypes": 3,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 4,
-        "1900-1940 | Small | Wood Frame": 4,
-        "1980-1999 | Medium | Wood Frame": 3,
-        "1941-1960 | Medium | Wood Frame": 2,
-        "Unknown": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1900-1940 | Large | Wood Frame": 1,
-        "1961-1979 | Large | Masonry": 1
+        "0": 11,
+        "3": 4
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.75",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.6667",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "buildingAssessedValueTotal": 0.2747,
+        "finishAreaSqft": 0.171,
+        "sizeSqft": 0.1674
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.0118,
-      "old_vs_ml_ari": 0.9338,
-      "agent_vs_ml_ari": 0.0118
+      "old_vs_agent_ari": 0.0823,
+      "old_vs_ml_ari": "N/A",
+      "agent_vs_ml_ari": "N/A"
     }
   },
   {
@@ -117,41 +116,40 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 6,
+      "n_archetypes": 5,
       "distribution": {
-        "Single-Family Detached": 1,
-        "Mobile Home": 11,
-        "Multi-Unit Residential": 3,
-        "Bungalow-Style": 3,
-        "Modern Large Home": 8,
-        "Vacant/Undefined": 1
+        "Single-Family Modern": 11,
+        "Single-Family Historic": 8,
+        "Manufactured Homes": 1,
+        "Multi-Unit Residential": 1,
+        "Miscellaneous/Other": 6
       },
-      "silhouette_score": 0.1555,
+      "silhouette_score": 0.0871,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 13,
+      "n_archetypes": 5,
       "distribution": {
-        "1961-1979 | Medium | Wood Frame": 5,
-        "1900-1940 | Small | Wood Frame": 5,
-        "1900-1940 | Medium | Wood Frame": 4,
-        "1980-1999 | Medium | Wood Frame": 3,
-        "Unknown": 2,
-        "1961-1979 | Small | Other": 2,
-        "1980-1999 | Small | Other": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1900-1940 | Large | Wood Frame": 1,
-        "2000+ | Medium | Other": 1,
-        "1980-1999 | Medium | Other": 1
+        "0": 14,
+        "1": 6,
+        "4": 5,
+        "3": 1,
+        "2": 1
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.3333",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.5",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "buildingAssessedValueTotal": 0.216,
+        "numOfRoomsTotal": 0.1565,
+        "grossFloorArea": 0.1418
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.1487,
-      "old_vs_ml_ari": 0.6799,
-      "agent_vs_ml_ari": 0.2269
+      "old_vs_agent_ari": 0.0345,
+      "old_vs_ml_ari": 0.028,
+      "agent_vs_ml_ari": 0.6515
     }
   },
   {
@@ -181,44 +179,42 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 5,
+      "n_archetypes": 6,
       "distribution": {
-        "Single-Family Basic": 3,
-        "Mobile/Manufactured Home": 12,
-        "Bungalow Type": 12,
-        "Large Multi-Level": 8,
-        "Unclassified or Incomplete Data": 1
+        "Single-Family Traditional Homes": 4,
+        "Multi-Family or Duplex Buildings": 9,
+        "Manufactured or Mobile Homes": 4,
+        "Bungalows with Detached Garages": 10,
+        "Luxury Homes with Extensive Amenities": 1,
+        "Vacant or Undefined Property Classes": 8
       },
-      "silhouette_score": 0.1332,
+      "silhouette_score": 0.1893,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 18,
+      "n_archetypes": 6,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 6,
-        "1980-1999 | Medium | Wood Frame": 4,
-        "Unknown": 4,
-        "1900-1940 | Small | Wood Frame": 4,
-        "1961-1979 | Medium | Wood Frame": 4,
-        "1961-1979 | Large | Masonry": 2,
-        "2000+ | Large | Other": 2,
-        "1961-1979 | Small | Other": 2,
-        "1980-1999 | Small | Other": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1900-1940 | Large | Wood Frame": 1,
-        "1941-1960 | Medium | Wood Frame": 1,
-        "2000+ | Medium | Other": 1,
-        "2000+ | Small | Unknown": 1,
-        "2000+ | Small | Other": 1
+        "5": 9,
+        "1": 8,
+        "3": 7,
+        "2": 4,
+        "0": 4,
+        "4": 4
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.375",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.25",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "finishAreaSqft": 0.1491,
+        "buildingAssessedValueTotal": 0.1463,
+        "yearOfConstruction": 0.1454
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.0834,
-      "old_vs_ml_ari": 0.7762,
-      "agent_vs_ml_ari": 0.0857
+      "old_vs_agent_ari": 0.0801,
+      "old_vs_ml_ari": 0.1055,
+      "agent_vs_ml_ari": 0.6422
     }
   },
   {
@@ -250,46 +246,42 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 5,
+      "n_archetypes": 6,
       "distribution": {
-        "Single-Family Housing": 19,
-        "Multi-Family Housing": 1,
-        "Mobile/Manufactured Homes": 9,
-        "Commercial Properties": 11,
-        "Other/Undefined Properties": 5
+        "Single-Family Detached": 4,
+        "Multi-Family Low-Rise": 14,
+        "Multi-Family High-Rise": 5,
+        "Manufactured Home": 17,
+        "Commercial Building": 3,
+        "Other": 2
       },
-      "silhouette_score": 0.1418,
+      "silhouette_score": 0.1533,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 20,
+      "n_archetypes": 6,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 9,
-        "Unknown": 7,
-        "1980-1999 | Medium | Wood Frame": 5,
-        "1961-1979 | Medium | Wood Frame": 4,
-        "1900-1940 | Small | Wood Frame": 3,
-        "1980-1999 | Small | Other": 3,
-        "1961-1979 | Large | Masonry": 2,
-        "1900-1940 | Large | Wood Frame": 2,
-        "1961-1979 | Small | Other": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1941-1960 | Medium | Wood Frame": 1,
-        "2000+ | Large | Other": 1,
-        "2000+ | Small | Unknown": 1,
-        "1941-1960 | Large | Masonry": 1,
-        "1980-1999 | Large | Masonry": 1,
-        "2000+ | Small | Other": 1,
-        "2000+ | Small | Wood Frame": 1
+        "3": 19,
+        "1": 14,
+        "2": 4,
+        "0": 4,
+        "5": 2,
+        "4": 2
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.4444",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.7778",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "numOfRoomsTotal": 0.2364,
+        "grossFloorArea": 0.1291,
+        "finishAreaSqft": 0.1256
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.1231,
-      "old_vs_ml_ari": 0.8187,
-      "agent_vs_ml_ari": 0.1519
+      "old_vs_agent_ari": 0.1446,
+      "old_vs_ml_ari": 0.1853,
+      "agent_vs_ml_ari": 0.8936
     }
   },
   {
@@ -323,53 +315,44 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 8,
+      "n_archetypes": 7,
       "distribution": {
-        "Modern Single-Family Homes": 10,
-        "Historic Single-Family Homes": 7,
-        "Multi-Family Apartament Buildings": 10,
-        "Manufactured Homes": 12,
-        "Luxury Residences": 6,
-        "Compact Urban Dwellings": 6,
-        "Mixed-use Buildings": 2,
-        "Specialized and Unique Structures": 1
+        "Single-Family Detached Houses": 11,
+        "Bungalows": 14,
+        "Mobile or Manufactured Homes": 2,
+        "Multi-Family Units": 11,
+        "Luxury Homes with Deck/Patio/Garage": 1,
+        "Older Vintage Houses": 5,
+        "Commercial/Business Properties": 10
       },
-      "silhouette_score": 0.2806,
+      "silhouette_score": 0.1615,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 22,
+      "n_archetypes": 7,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 13,
-        "1900-1940 | Small | Wood Frame": 7,
-        "Unknown": 6,
-        "1980-1999 | Medium | Wood Frame": 3,
-        "1961-1979 | Small | Other": 3,
-        "1961-1979 | Medium | Wood Frame": 3,
-        "1961-1979 | Large | Masonry": 2,
-        "1941-1960 | Medium | Wood Frame": 2,
-        "1941-1960 | Large | Masonry": 2,
-        "1980-1999 | Small | Other": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "2000+ | Medium | Other": 1,
-        "1980-1999 | Medium | Other": 1,
-        "2000+ | Large | Other": 1,
-        "2000+ | Small | Unknown": 1,
-        "1980-1999 | Large | Masonry": 1,
-        "2000+ | Small | Other": 1,
-        "1900-1940 | Large | Wood Frame": 1,
-        "1941-1960 | Small | Wood Frame": 1,
-        "1900-1940 | Medium | Other": 1,
-        "2000+ | Large | Wood Frame": 1
+        "1": 12,
+        "0": 12,
+        "6": 11,
+        "3": 11,
+        "5": 5,
+        "2": 2,
+        "4": 1
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.4545",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.7273",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "buildingAssessedValueTotal": 0.1757,
+        "numOfRoomsTotal": 0.1346,
+        "sizeSqft": 0.1267
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.1553,
-      "old_vs_ml_ari": 0.7409,
-      "agent_vs_ml_ari": 0.2318
+      "old_vs_agent_ari": 0.1012,
+      "old_vs_ml_ari": 0.1419,
+      "agent_vs_ml_ari": 0.8521
     }
   },
   {
@@ -407,50 +390,40 @@
     "ai_agent": {
       "n_archetypes": 6,
       "distribution": {
-        "Single-Family Detached Small": 5,
-        "Single-Family Detached Large": 21,
-        "Mobile/Manufactured Home": 22,
-        "Multi-Family Low-Rise": 7,
-        "Multi-Family High-Rise": 4,
-        "Specialized Structures": 3
+        "Single-Family Detached": 11,
+        "Multi-Family Residential": 19,
+        "Mobile Home": 4,
+        "Historical Home": 9,
+        "Large Luxury Home": 15,
+        "Accessory Structures": 4
       },
-      "silhouette_score": 0.1567,
+      "silhouette_score": 0.1699,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 24,
+      "n_archetypes": 6,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 12,
-        "Unknown": 7,
-        "1900-1940 | Small | Wood Frame": 7,
-        "1980-1999 | Medium | Wood Frame": 5,
-        "1941-1960 | Medium | Wood Frame": 5,
-        "1900-1940 | Large | Wood Frame": 4,
-        "1961-1979 | Large | Masonry": 3,
-        "1961-1979 | Medium | Wood Frame": 3,
-        "1961-1979 | Small | Other": 2,
-        "1980-1999 | Small | Other": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1980-1999 | Medium | Other": 1,
-        "2000+ | Large | Other": 1,
-        "2000+ | Small | Unknown": 1,
-        "1980-1999 | Large | Masonry": 1,
-        "2000+ | Small | Other": 1,
-        "1941-1960 | Small | Wood Frame": 1,
-        "2000+ | Small | Wood Frame": 1,
-        "1900-1940 | Medium | Other": 1,
-        "2000+ | Large | Wood Frame": 1,
-        "1961-1979 | Small | Wood Frame": 1,
-        "2000+ | Medium | Wood Frame": 1
+        "4": 19,
+        "1": 19,
+        "0": 10,
+        "3": 8,
+        "5": 3,
+        "2": 3
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.6154",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.3846",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "buildingAssessedValueTotal": 0.1518,
+        "numOfRoomsTotal": 0.1355,
+        "age": 0.1234
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.1141,
-      "old_vs_ml_ari": 0.8784,
-      "agent_vs_ml_ari": 0.1158
+      "old_vs_agent_ari": 0.1149,
+      "old_vs_ml_ari": 0.1188,
+      "agent_vs_ml_ari": 0.699
     }
   },
   {
@@ -489,53 +462,46 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 6,
+      "n_archetypes": 8,
       "distribution": {
-        "Single-Family Detached": 17,
-        "Multi-Family Low-Rise": 14,
-        "Manufactured Home": 5,
-        "High-Rise Residential": 15,
-        "Commercial Mixed Use": 10,
-        "Others": 11
+        "Modern Single-Family Detached": 7,
+        "Historic Single-Family Detached": 18,
+        "Mobile Homes": 2,
+        "Multi-Family Residential": 10,
+        "Townhouses": 16,
+        "Luxury Homes": 4,
+        "Low-Rise Residential with Garages": 5,
+        "High-Rise Apartments": 10
       },
-      "silhouette_score": 0.1644,
+      "silhouette_score": 0.2014,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 27,
+      "n_archetypes": 8,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 17,
-        "Unknown": 7,
-        "1961-1979 | Medium | Wood Frame": 6,
-        "1900-1940 | Small | Wood Frame": 5,
-        "1941-1960 | Medium | Wood Frame": 5,
-        "1961-1979 | Large | Masonry": 4,
-        "1980-1999 | Medium | Wood Frame": 4,
-        "1980-1999 | Small | Other": 4,
-        "1900-1940 | Large | Wood Frame": 3,
-        "1961-1979 | Small | Other": 3,
-        "1941-1960 | Large | Masonry": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "2000+ | Medium | Other": 1,
-        "1980-1999 | Medium | Other": 1,
-        "2000+ | Large | Other": 1,
-        "1941-1960 | Small | Wood Frame": 1,
-        "2000+ | Small | Wood Frame": 1,
-        "1900-1940 | Medium | Other": 1,
-        "2000+ | Large | Wood Frame": 1,
-        "2000+ | Medium | Wood Frame": 1,
-        "1900-1940 | Large | Masonry": 1,
-        "1941-1960 | Large | Wood Frame": 1,
-        "1980-1999 | Small | Wood Frame": 1
+        "1": 16,
+        "4": 16,
+        "3": 12,
+        "7": 12,
+        "0": 6,
+        "6": 5,
+        "5": 3,
+        "2": 2
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.6667",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.6",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "buildingAssessedValueTotal": 0.1688,
+        "age": 0.1356,
+        "yearOfConstruction": 0.1293
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.1126,
-      "old_vs_ml_ari": 0.9184,
-      "agent_vs_ml_ari": 0.1112
+      "old_vs_agent_ari": 0.1541,
+      "old_vs_ml_ari": 0.1391,
+      "agent_vs_ml_ari": 0.7959
     }
   },
   {
@@ -576,52 +542,40 @@
     "ai_agent": {
       "n_archetypes": 6,
       "distribution": {
-        "Single-Family Detached": 21,
-        "Mobile/Manufactured Home": 20,
-        "Bungalow": 7,
-        "Multi-Unit Residential": 10,
-        "Luxury Residential": 11,
-        "Other": 12
+        "Single-Family Detached Homes": 7,
+        "Mobile/Manufactured Homes": 25,
+        "Multi-Family Low-Rise": 6,
+        "Multi-Family Mid/High-Rise": 20,
+        "Commercial/Retail": 20,
+        "Industrial/Agricultural": 3
       },
-      "silhouette_score": 0.1561,
+      "silhouette_score": 0.1773,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 27,
+      "n_archetypes": 6,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 23,
-        "1961-1979 | Medium | Wood Frame": 8,
-        "Unknown": 7,
-        "1900-1940 | Small | Wood Frame": 5,
-        "1941-1960 | Medium | Wood Frame": 5,
-        "1980-1999 | Medium | Wood Frame": 4,
-        "1900-1940 | Large | Wood Frame": 4,
-        "1941-1960 | Large | Wood Frame": 4,
-        "2000+ | Small | Other": 3,
-        "1961-1979 | Small | Other": 2,
-        "1980-1999 | Small | Other": 2,
-        "1900-1940 | Large | Masonry": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1961-1979 | Large | Masonry": 1,
-        "2000+ | Medium | Other": 1,
-        "1980-1999 | Medium | Other": 1,
-        "2000+ | Large | Other": 1,
-        "1941-1960 | Small | Wood Frame": 1,
-        "2000+ | Small | Wood Frame": 1,
-        "1900-1940 | Medium | Other": 1,
-        "2000+ | Large | Wood Frame": 1,
-        "1961-1979 | Small | Wood Frame": 1,
-        "2000+ | Medium | Wood Frame": 1,
-        "1980-1999 | Small | Wood Frame": 1
+        "1": 26,
+        "4": 22,
+        "3": 20,
+        "2": 6,
+        "0": 5,
+        "5": 2
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.5294",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.8235",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "numOfRoomsTotal": 0.1983,
+        "buildingAssessedValueTotal": 0.167,
+        "numOfBedrooms": 0.1285
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.2021,
-      "old_vs_ml_ari": 0.8687,
-      "agent_vs_ml_ari": 0.2212
+      "old_vs_agent_ari": 0.1501,
+      "old_vs_ml_ari": 0.1607,
+      "agent_vs_ml_ari": 0.9329
     }
   },
   {
@@ -663,58 +617,44 @@
       "method": "Rule-based (Era \u00d7 Size \u00d7 Construction)"
     },
     "ai_agent": {
-      "n_archetypes": 8,
+      "n_archetypes": 7,
       "distribution": {
-        "Single-Family Modern Low-Rise": 5,
-        "Single-Family Historical Homes": 14,
-        "Manufactured or Mobile Homes": 19,
-        "Large Multi-Family Complexes": 7,
-        "Small Multi-Family Units": 21,
-        "Farmhouses and Agricultural Buildings": 11,
-        "Urban Compact Structures": 12,
-        "Other/Unclassified": 1
+        "Single-Family Detached": 7,
+        "Multi-Family Residential": 18,
+        "Manufactured Homes": 20,
+        "Old Small Houses": 22,
+        "Newer Large Houses": 3,
+        "Commercial": 14,
+        "Other": 6
       },
-      "silhouette_score": 0.1924,
+      "silhouette_score": 0.243,
       "method": "GPT-4o + KMeans clustering"
     },
     "ml_model": {
-      "n_archetypes": 30,
+      "n_archetypes": 7,
       "distribution": {
-        "1900-1940 | Medium | Wood Frame": 22,
-        "Unknown": 11,
-        "1961-1979 | Medium | Wood Frame": 7,
-        "1941-1960 | Medium | Wood Frame": 7,
-        "1980-1999 | Medium | Wood Frame": 5,
-        "1900-1940 | Small | Wood Frame": 5,
-        "1900-1940 | Large | Wood Frame": 4,
-        "1961-1979 | Small | Other": 3,
-        "1980-1999 | Small | Other": 3,
-        "1941-1960 | Large | Masonry": 3,
-        "2000+ | Small | Other": 2,
-        "2000+ | Large | Wood Frame": 2,
-        "1941-1960 | Large | Wood Frame": 2,
-        "1980-1999 | Large | Wood Frame": 2,
-        "1900-1940 | Medium | Masonry": 1,
-        "1961-1979 | Large | Masonry": 1,
-        "2000+ | Medium | Other": 1,
-        "2000+ | Large | Other": 1,
-        "1980-1999 | Large | Masonry": 1,
-        "1941-1960 | Small | Wood Frame": 1,
-        "1900-1940 | Medium | Other": 1,
-        "1961-1979 | Small | Wood Frame": 1,
-        "2000+ | Medium | Wood Frame": 1,
-        "1980-1999 | Small | Wood Frame": 1,
-        "1900-1940 | Unknown | Unknown": 1,
-        "1961-1979 | Unknown | Unknown": 1
+        "2": 21,
+        "3": 21,
+        "1": 18,
+        "5": 14,
+        "0": 7,
+        "6": 6,
+        "4": 3
       },
       "silhouette_score": "N/A (supervised)",
-      "accuracy": "0.5556",
-      "method": "Random Forest (old-script labels as ground truth)"
+      "accuracy": "0.9444",
+      "ground_truth": "AI Agent",
+      "feature_importance": {
+        "sizeSqft": 0.208,
+        "finishAreaSqft": 0.1714,
+        "buildingAssessedValueTotal": 0.1568
+      },
+      "method": "Random Forest (trained on Agent labels)"
     },
     "agreement": {
-      "old_vs_agent_ari": 0.2329,
-      "old_vs_ml_ari": 0.9075,
-      "agent_vs_ml_ari": 0.23
+      "old_vs_agent_ari": 0.2472,
+      "old_vs_ml_ari": 0.228,
+      "agent_vs_ml_ari": 0.9647
     }
   }
 ]

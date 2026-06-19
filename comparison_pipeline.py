@@ -141,27 +141,39 @@ def run_agent_fresh(subset_df: pd.DataFrame) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Approach 3 – ML Model (Random Forest, old-script labels as ground truth)
+# Approach 3 – ML Model (Random Forest)
 # ---------------------------------------------------------------------------
-def run_ml_model(subset_df):
+def run_ml_model(subset_df, agent_labels=None):
+    """
+    Trains a Random Forest classifier.
+    Uses Agent 1 cluster labels as ground truth if provided,
+    otherwise falls back to old script labels.
+    This makes it a truly independent validation approach.
+    """
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import accuracy_score
 
-    # Get labels from old script as ground truth
-    labeled = run_old_classification(subset_df.copy())
-    y = labeled["archetype_label"].fillna("Unknown").astype(str)
+    # Use agent labels as ground truth if available
+    if agent_labels is not None and len(agent_labels) == len(subset_df):
+        y = pd.Series(agent_labels).astype(str)
+        ground_truth_source = "AI Agent"
+    else:
+        labeled = run_old_classification(subset_df.copy())
+        y = labeled["archetype_label"].fillna("Unknown").astype(str)
+        ground_truth_source = "Old Script"
 
-    # Drop rows where y is still NaN after fill
-    valid_mask = y.notna() & (y != "nan") & (y != "None")
-    y = y[valid_mask]
-    subset_df = subset_df[valid_mask]
+    # Drop invalid labels
+    valid_mask = y.notna() & (y != "nan") & (y != "None") & (y != "-1")
+    y          = y[valid_mask].reset_index(drop=True)
+    subset_df  = subset_df[valid_mask].reset_index(drop=True)
 
-    # Features
+    # Features - use numeric building attributes
     feature_cols = [
         "yearOfConstruction", "finishAreaSqft",
         "numOfBedrooms", "numOfFloors", "sizeSqft",
-        "age", "grossFloorArea", "numOfRoomsTotal"
+        "age", "grossFloorArea", "numOfRoomsTotal",
+        "buildingHeightAverage", "buildingAssessedValueTotal"
     ]
     feature_cols = [c for c in feature_cols if c in subset_df.columns]
 
@@ -171,51 +183,63 @@ def run_ml_model(subset_df):
         X[col] = pd.to_numeric(subset_df[col], errors="coerce").fillna(0)
     X = X.fillna(0).astype(float)
 
-    # Need enough buildings and classes
     n_classes = y.nunique()
-    if len(X) < 15 or n_classes < 2:
+    n_samples = len(X)
+
+    if n_samples < 15 or n_classes < 2:
         return {
-            "n_archetypes": n_classes,
-            "distribution": y.value_counts().to_dict(),
-            "silhouette_score": "N/A",
-            "accuracy": f"N/A ({len(X)} buildings / {n_classes} classes — too few)",
-            "labels": y.values
+            "n_archetypes":     n_classes,
+            "distribution":     y.value_counts().to_dict(),
+            "silhouette_score": "N/A (supervised)",
+            "accuracy":         f"N/A ({n_samples} buildings / {n_classes} classes)",
+            "ground_truth":     ground_truth_source,
+            "labels":           y.values,
+            "feature_importance": {},
         }
 
-    # 80/20 stratified split
+    # Reduce classes if too many relative to sample count
+    max_classes = max(2, n_samples // 5)
+    if n_classes > max_classes:
+        top_classes = y.value_counts().head(max_classes).index
+        mask      = y.isin(top_classes)
+        X         = X[mask].reset_index(drop=True)
+        y         = y[mask].reset_index(drop=True)
+        n_classes = y.nunique()
+
+    # 80/20 stratified split, plain split as fallback
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y,
-            test_size=0.2,
-            random_state=42,
-            stratify=y
+            X, y, test_size=0.2, random_state=42, stratify=y
         )
     except ValueError:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y,
-            test_size=0.2,
-            random_state=42
+            X, y, test_size=0.2, random_state=42
         )
 
-    # Train Random Forest
     rf = RandomForestClassifier(
         n_estimators=100,
         random_state=42,
-        min_samples_leaf=1
+        min_samples_leaf=1,
     )
     rf.fit(X_train, y_train)
 
-    # Predict and evaluate
-    y_pred = rf.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+    y_pred    = rf.predict(X_test)
+    accuracy  = accuracy_score(y_test, y_pred)
     all_preds = rf.predict(X)
 
+    importance   = dict(zip(feature_cols,
+                            [round(float(v), 4) for v in rf.feature_importances_]))
+    top_features = dict(sorted(importance.items(),
+                               key=lambda x: x[1], reverse=True)[:3])
+
     return {
-        "n_archetypes": n_classes,
-        "distribution": pd.Series(all_preds).value_counts().to_dict(),
+        "n_archetypes":     n_classes,
+        "distribution":     pd.Series(all_preds).value_counts().to_dict(),
         "silhouette_score": "N/A (supervised)",
-        "accuracy": round(accuracy, 4),
-        "labels": all_preds
+        "accuracy":         round(accuracy, 4),
+        "ground_truth":     ground_truth_source,
+        "labels":           all_preds,
+        "feature_importance": top_features,
     }
 
 
@@ -256,6 +280,10 @@ def print_comparison_table(comparison: dict) -> None:
           f"{str(agt['silhouette_score']):>12} {'N/A':>10}")
     print(f"  {'ML Model':<20} {ml['n_archetypes']:>11} "
           f"{'N/A':>12} {str(ml['accuracy']):>10}")
+    if comparison["ml_model"].get("feature_importance"):
+        top = list(comparison["ml_model"]["feature_importance"].keys())[:3]
+        print(f"  ML Top Features: {', '.join(top)}")
+    print(f"  ML Ground Truth: {comparison['ml_model'].get('ground_truth', 'N/A')}")
 
     ag = comparison["agreement"]
     print(f"\n  Agreement (Adjusted Rand Index):")
@@ -347,7 +375,8 @@ def run_comparison(csv_path: str) -> list[dict]:
 
         # ── Approach 3: ML Model ─────────────────────────────────────────
         print("  [3/3] Running ML Model (Random Forest)...")
-        ml_result = run_ml_model(subset.copy())
+        agent_labels = agent_result.get("labels", None)
+        ml_result = run_ml_model(subset.copy(), agent_labels)
 
         # ── Agreement ────────────────────────────────────────────────────
         comparison = {
@@ -373,7 +402,9 @@ def run_comparison(csv_path: str) -> list[dict]:
                 "distribution":     ml_result["distribution"],
                 "silhouette_score": str(ml_result["silhouette_score"]),
                 "accuracy":         str(ml_result["accuracy"]),
-                "method": "Random Forest (old-script labels as ground truth)",
+                "ground_truth":     ml_result.get("ground_truth", "N/A"),
+                "feature_importance": ml_result.get("feature_importance", {}),
+                "method": "Random Forest (trained on Agent labels)",
             },
 
             "agreement": {

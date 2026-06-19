@@ -2,66 +2,94 @@
   "total_buildings": 90,
   "train_buildings": 72,
   "test_buildings": 18,
-  "total_archetypes": 8,
-  "silhouette_score_train": 0.3009,
-  "silhouette_score_test": 0.2464,
-  "inertia": 696.45,
+  "total_archetypes": 12,
+  "silhouette_score_train": 0.1702,
+  "silhouette_score_test": 0.1877,
+  "inertia": 1475.41,
   "archetypes": [
     {
-      "name": "Old, Small, Wood-Frame Single-Family Homes",
+      "name": "Single-family, Wood-frame, Low-rise, Small",
+      "train_count": 4,
+      "test_count": 1,
+      "total_count": 5,
+      "percentage": 5.6
+    },
+    {
+      "name": "Single-family, Wood-frame, Low-rise, Medium/Large",
+      "train_count": 11,
+      "test_count": 3,
+      "total_count": 14,
+      "percentage": 15.6
+    },
+    {
+      "name": "Single-family, Masonry, Low-rise, Small",
+      "train_count": 2,
+      "test_count": 0,
+      "total_count": 2,
+      "percentage": 2.2
+    },
+    {
+      "name": "Single-family, Masonry, Low-rise, Large",
+      "train_count": 9,
+      "test_count": 2,
+      "total_count": 11,
+      "percentage": 12.2
+    },
+    {
+      "name": "Multi-family, Wood-frame, Multi-story",
+      "train_count": 7,
+      "test_count": 2,
+      "total_count": 9,
+      "percentage": 10.0
+    },
+    {
+      "name": "Multi-family, Masonry-built, Multi-story",
+      "train_count": 2,
+      "test_count": 0,
+      "total_count": 2,
+      "percentage": 2.2
+    },
+    {
+      "name": "Mobile Home, Pre-1990 Manufacture",
+      "train_count": 7,
+      "test_count": 2,
+      "total_count": 9,
+      "percentage": 10.0
+    },
+    {
+      "name": "Mobile Home, 1990+ Modern Construction Standards",
+      "train_count": 6,
+      "test_count": 1,
+      "total_count": 7,
+      "percentage": 7.8
+    },
+    {
+      "name": "Single-family, Concrete-built, Low-rise, Small",
+      "train_count": 7,
+      "test_count": 2,
+      "total_count": 9,
+      "percentage": 10.0
+    },
+    {
+      "name": "Single-family, Concrete-built, Low-rise, Large",
+      "train_count": 7,
+      "test_count": 2,
+      "total_count": 9,
+      "percentage": 10.0
+    },
+    {
+      "name": "Multi-family, Concrete-built, Multi-story",
+      "train_count": 8,
+      "test_count": 2,
+      "total_count": 10,
+      "percentage": 11.1
+    },
+    {
+      "name": "Mobile Home, Post-2000 Enhanced Standards",
       "train_count": 2,
       "test_count": 1,
       "total_count": 3,
       "percentage": 3.3
-    },
-    {
-      "name": "Mid-Age, Medium, Wood-Frame/Masonry Single-Family Homes",
-      "train_count": 16,
-      "test_count": 4,
-      "total_count": 20,
-      "percentage": 22.2
-    },
-    {
-      "name": "Modern, Large, Wood-Frame Single-Family Homes",
-      "train_count": 15,
-      "test_count": 4,
-      "total_count": 19,
-      "percentage": 21.1
-    },
-    {
-      "name": "Post-Modern, Large Single-Family or Multi-Family Buildings",
-      "train_count": 10,
-      "test_count": 2,
-      "total_count": 12,
-      "percentage": 13.3
-    },
-    {
-      "name": "Manufactured/Mobile Homes",
-      "train_count": 9,
-      "test_count": 2,
-      "total_count": 11,
-      "percentage": 12.2
-    },
-    {
-      "name": "Residential Buildings with Comprehensive Auxiliary Structures",
-      "train_count": 9,
-      "test_count": 2,
-      "total_count": 11,
-      "percentage": 12.2
-    },
-    {
-      "name": "Non-Residential Buildings",
-      "train_count": 5,
-      "test_count": 1,
-      "total_count": 6,
-      "percentage": 6.7
-    },
-    {
-      "name": "Not Enough/Conflicting Data Archetype",
-      "train_count": 6,
-      "test_count": 2,
-      "total_count": 8,
-      "percentage": 8.9
     }
   ]
 }

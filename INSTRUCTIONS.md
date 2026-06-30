@@ -133,6 +133,4 @@ Check the validation report output — it will tell you exactly which columns ar
 
 ---
 
-## Questions
 
-Contact Adi Singh ([@researchingadi](https://github.com/researchingadi)) for any setup issues.
